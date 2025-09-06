@@ -1,0 +1,44 @@
+services:
+  app:
+    build: .
+    ports:
+      - '3000:3000'
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - API_PREFIX=api
+      - CORS_ORIGIN=*
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_USERNAME=root
+      - DB_PASSWORD=password
+      - DB_DATABASE=employees_db
+      - JWT_SECRET=super-secret-jwt-key-for-production
+      - JWT_EXPIRES_IN=7d
+    depends_on:
+      mysql:
+        condition: service_healthy
+    volumes:
+      - ./logs:/app/logs
+      - ./temp:/app/temp
+    restart: unless-stopped
+
+  mysql:
+    image: mysql:latest
+    ports:
+      - '3306:3306'
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=employees_db
+      - MYSQL_CHARACTER_SET_SERVER=utf8mb4
+      - MYSQL_COLLATION_SERVER=utf8mb4_unicode_ci
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost']
+      timeout: 20s
+      retries: 10
+    restart: unless-stopped
+
+volumes:
+  mysql_data:

@@ -1,0 +1,295 @@
+{
+  "info": {
+    "name": "Employee Management System API",
+    "description": "Complete API collection for testing the Employee Management System",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000/api",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Departments",
+      "item": [
+        {
+          "name": "Get All Departments",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/departments",
+              "host": ["{{baseUrl}}"],
+              "path": ["departments"]
+            }
+          }
+        },
+        {
+          "name": "Get Department by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/departments/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["departments", "1"]
+            }
+          }
+        },
+        {
+          "name": "Create Department",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Research & Development\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/departments",
+              "host": ["{{baseUrl}}"],
+              "path": ["departments"]
+            }
+          }
+        },
+        {
+          "name": "Update Department",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Research & Development Updated\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/departments/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["departments", "1"]
+            }
+          }
+        },
+        {
+          "name": "Delete Department",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/departments/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["departments", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Employees",
+      "item": [
+        {
+          "name": "Get All Employees",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/employees?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["employees"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Employees with Filters",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/employees?department_id=2&search=john&sort_by=salary&order=DESC",
+              "host": ["{{baseUrl}}"],
+              "path": ["employees"],
+              "query": [
+                {
+                  "key": "department_id",
+                  "value": "2"
+                },
+                {
+                  "key": "search",
+                  "value": "john"
+                },
+                {
+                  "key": "sort_by",
+                  "value": "salary"
+                },
+                {
+                  "key": "order",
+                  "value": "DESC"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Employee by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/employees/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["employees", "1"]
+            }
+          }
+        },
+        {
+          "name": "Get Employee Statistics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/employees/statistics",
+              "host": ["{{baseUrl}}"],
+              "path": ["employees", "statistics"]
+            }
+          }
+        },
+        {
+          "name": "Create Employee",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john.doe@example.com\",\n  \"salary\": 75000,\n  \"department_id\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/employees",
+              "host": ["{{baseUrl}}"],
+              "path": ["employees"]
+            }
+          }
+        },
+        {
+          "name": "Update Employee",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Doe Updated\",\n  \"salary\": 80000\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/employees/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["employees", "1"]
+            }
+          }
+        },
+        {
+          "name": "Delete Employee",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/employees/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["employees", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reports",
+      "item": [
+        {
+          "name": "Export Employees to CSV",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/reports/employees/export/csv?includeTimestamps=true",
+              "host": ["{{baseUrl}}"],
+              "path": ["reports", "employees", "export", "csv"],
+              "query": [
+                {
+                  "key": "includeTimestamps",
+                  "value": "true"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Export Employees to PDF",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/reports/employees/export/pdf",
+              "host": ["{{baseUrl}}"],
+              "path": ["reports", "employees", "export", "pdf"]
+            }
+          }
+        },
+        {
+          "name": "Export Filtered Employees to CSV",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/reports/employees/export/csv?department_id=2&sort_by=salary&order=DESC",
+              "host": ["{{baseUrl}}"],
+              "path": ["reports", "employees", "export", "csv"],
+              "query": [
+                {
+                  "key": "department_id",
+                  "value": "2"
+                },
+                {
+                  "key": "sort_by",
+                  "value": "salary"
+                },
+                {
+                  "key": "order",
+                  "value": "DESC"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
