@@ -27,6 +27,10 @@ export class DepartmentsController {
     type: Department,
   })
   @ApiResponse({ status: 400, description: 'Bad request' })
+  @ApiResponse({
+    status: 409,
+    description: 'Department with this name already exists',
+  })
   async create(@Body() createDepartmentDto: CreateDepartmentDto) {
     const data = await this.departmentsService.create(createDepartmentDto);
     return {
@@ -77,6 +81,10 @@ export class DepartmentsController {
     type: Department,
   })
   @ApiResponse({ status: 404, description: 'Department not found' })
+  @ApiResponse({
+    status: 409,
+    description: 'Department with this name already exists',
+  })
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateDepartmentDto: UpdateDepartmentDto,

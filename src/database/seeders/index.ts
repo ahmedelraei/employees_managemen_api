@@ -1,11 +1,15 @@
 import { DataSource } from 'typeorm';
 import { seedDepartments } from './department.seeder';
 import { seedEmployees } from './employee.seeder';
+import { seedUsers } from './user.seeder';
 
 export async function runSeeders(dataSource: DataSource): Promise<void> {
   console.log('Starting database seeding...');
 
   try {
+    console.log('Seeding users...');
+    await seedUsers(dataSource);
+
     console.log('Seeding departments...');
     await seedDepartments(dataSource);
 

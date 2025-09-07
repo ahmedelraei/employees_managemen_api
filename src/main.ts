@@ -37,9 +37,21 @@ async function bootstrap() {
       'A comprehensive Employee Management System built with NestJS',
     )
     .setVersion('1.0')
+    .addTag('Authentication', 'Authentication operations')
     .addTag('Employees', 'Employee management operations')
     .addTag('Departments', 'Department management operations')
     .addTag('Reports', 'Report generation and export operations')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        name: 'JWT',
+        description: 'Enter JWT token',
+        in: 'header',
+      },
+      'JWT-auth',
+    )
     .addServer(
       `http://localhost:${configService.get('app.port')}`,
       'Development server',

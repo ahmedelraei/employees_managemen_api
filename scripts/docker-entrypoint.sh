@@ -12,9 +12,22 @@ done
 
 echo "✅ Database is ready!"
 
-# Initialize database
-echo "🔧 Initializing database..."
-node scripts/init-db.js || echo "⚠️  Database initialization failed, continuing anyway..."
+# Run database migrations
+echo "🔧 Running database migrations..."
+if node scripts/migrate.js; then
+  echo "✅ Database migrations completed successfully!"
+else
+  echo "⚠️  Database migrations failed, trying basic initialization..."
+  node scripts/init-db.js || echo "⚠️  Database initialization failed, continuing anyway..."
+fi
+
+# Seed database with initial data
+echo "🌱 Seeding database..."
+if node scripts/seed.js; then
+  echo "✅ Database seeding completed successfully!"
+else
+  echo "⚠️  Database seeding failed, continuing anyway..."
+fi
 
 # Start the application
 echo "🎉 Starting the application..."

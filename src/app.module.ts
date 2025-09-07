@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { APP_FILTER, APP_PIPE, APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_FILTER, APP_PIPE, APP_INTERCEPTOR, APP_GUARD } from '@nestjs/core';
 import { ValidationPipe as CustomValidationPipe } from './common/pipes/validation.pipe';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
@@ -13,6 +13,8 @@ import { DepartmentsModule } from './modules/departments/departments.module';
 import { EmployeesModule } from './modules/employees/employees.module';
 import { ReportsModule } from './modules/reports/reports.module';
 import { LogsModule } from './modules/logs/logs.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
 
 @Module({
   imports: [
@@ -26,6 +28,7 @@ import { LogsModule } from './modules/logs/logs.module';
         configService.get('database')!,
       inject: [ConfigService],
     }),
+    AuthModule,
     DepartmentsModule,
     EmployeesModule,
     ReportsModule,
@@ -45,6 +48,10 @@ import { LogsModule } from './modules/logs/logs.module';
     {
       provide: APP_INTERCEPTOR,
       useClass: LoggingInterceptor,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
     },
   ],
 })

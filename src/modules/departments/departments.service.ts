@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ConflictException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Department } from './entities/department.entity';
@@ -13,8 +17,30 @@ export class DepartmentsService {
   ) {}
 
   async create(createDepartmentDto: CreateDepartmentDto): Promise<Department> {
+    // Check if department with the same name already exists
+    const existingDepartment = await this.departmentRepository.findOne({
+      where: { name: createDepartmentDto.name },
+    });
+
+    if (existingDepartment) {
+      throw new ConflictException(
+        `Department with name '${createDepartmentDto.name}' already exists`,
+      );
+    }
+
     const department = this.departmentRepository.create(createDepartmentDto);
-    return await this.departmentRepository.save(department);
+
+    try {
+      return await this.departmentRepository.save(department);
+    } catch (error) {
+      // Handle database-level unique constraint violations
+      if (error.code === 'ER_DUP_ENTRY') {
+        throw new ConflictException(
+          `Department with name '${createDepartmentDto.name}' already exists`,
+        );
+      }
+      throw error;
+    }
   }
 
   async findAll(): Promise<Department[]> {
@@ -41,8 +67,36 @@ export class DepartmentsService {
     updateDepartmentDto: UpdateDepartmentDto,
   ): Promise<Department> {
     const department = await this.findOne(id);
+
+    // If updating the name, check for duplicates (excluding current department)
+    if (
+      updateDepartmentDto.name &&
+      updateDepartmentDto.name !== department.name
+    ) {
+      const existingDepartment = await this.departmentRepository.findOne({
+        where: { name: updateDepartmentDto.name },
+      });
+
+      if (existingDepartment && existingDepartment.id !== id) {
+        throw new ConflictException(
+          `Department with name '${updateDepartmentDto.name}' already exists`,
+        );
+      }
+    }
+
     Object.assign(department, updateDepartmentDto);
-    return await this.departmentRepository.save(department);
+
+    try {
+      return await this.departmentRepository.save(department);
+    } catch (error) {
+      // Handle database-level unique constraint violations
+      if (error.code === 'ER_DUP_ENTRY') {
+        throw new ConflictException(
+          `Department with name '${updateDepartmentDto.name}' already exists`,
+        );
+      }
+      throw error;
+    }
   }
 
   async remove(id: number): Promise<void> {
